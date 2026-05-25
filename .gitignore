@@ -1,0 +1,24 @@
+# Build outputs
+automyx-cloudguard
+automyx-cloudguard.exe
+automyx-cloudguard-*
+*.exe
+
+# Real scan outputs - do not publish customer/account data
+automyx-report.json
+*-report.json
+reports/
+
+# Local exports
+*.pdf
+exports/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Keep public demo samples
+!samples/
+!samples/*.json

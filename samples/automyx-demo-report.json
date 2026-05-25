@@ -1,0 +1,402 @@
+{
+  "scan_metadata": {
+    "tool": "AutoMyx CloudGuard CLI",
+    "version": "1.1.0",
+    "scan_time": "2026-05-25T07:42:06Z",
+    "aws_account_id": "000000000000",
+    "aws_region": "demo",
+    "status": "COMPLETED",
+    "mode": "DEMO"
+  },
+  "summary": {
+    "total_checked": 20,
+    "total_findings": 9,
+    "critical": 2,
+    "high": 2,
+    "medium": 3,
+    "low": 2,
+    "cost_savings_monthly": 20,
+    "services_scanned": 10,
+    "services_deployed_in_region": 9
+  },
+  "findings": [
+    {
+      "id": "DEMO-SEC-IAM-ROOT-MFA",
+      "service": "IAM",
+      "category": "SECURITY",
+      "severity": "CRITICAL",
+      "title": "[DEMO] Root Account Multi-Factor Authentication (MFA) Missing",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "arn:aws:iam::000000000000:root",
+      "evidence": "DEMO DATA: credential report mfa_active=false.",
+      "remediation_cmd": "Enable MFA for the root user in the AWS Console.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-SEC-EC2-SG",
+      "service": "EC2 / Security Groups",
+      "category": "SECURITY",
+      "severity": "CRITICAL",
+      "title": "[DEMO] SSH Port Exposed to Public Internet",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "sg-demo000000000000",
+      "evidence": "DEMO DATA: Ingress TCP Port=22 Source=0.0.0.0/0.",
+      "remediation_cmd": "aws ec2 revoke-security-group-ingress --group-id sg-demo000000000000 --protocol tcp --port 22 --cidr 0.0.0.0/0",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-COST-EBS",
+      "service": "EC2 / EBS",
+      "category": "COST",
+      "severity": "MEDIUM",
+      "title": "[DEMO] Orphaned EBS Volume Incurring Costs",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "vol-demo000000000000",
+      "evidence": "DEMO DATA: State=available Size=250GB.",
+      "remediation_cmd": "aws ec2 delete-volume --volume-id vol-demo000000000000",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-SEC-CF-HTTP",
+      "service": "CloudFront",
+      "category": "SECURITY",
+      "severity": "MEDIUM",
+      "title": "[DEMO] CloudFront Allows HTTP Viewer Requests",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "EDFDEMO000000",
+      "evidence": "DEMO DATA: ViewerProtocolPolicy=allow-all.",
+      "remediation_cmd": "Update viewer protocol policy to redirect-to-https.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-SEC-ACM-EXPIRY",
+      "service": "ACM",
+      "category": "SECURITY",
+      "severity": "HIGH",
+      "title": "[DEMO] ACM Certificate Expires Soon",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "arn:aws:acm:demo:000000000000:certificate/demo",
+      "evidence": "DEMO DATA: DaysRemaining=10.",
+      "remediation_cmd": "Confirm validation and renew or replace the certificate.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-SEC-ELB-NO-HTTPS",
+      "service": "ELBv2",
+      "category": "SECURITY",
+      "severity": "HIGH",
+      "title": "[DEMO] Internet-Facing Load Balancer Has No HTTPS Listener",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "arn:aws:elasticloadbalancing:demo:000000000000:loadbalancer/app/demo/123",
+      "evidence": "DEMO DATA: Scheme=internet-facing HTTPSListener=false.",
+      "remediation_cmd": "Add an HTTPS listener with an ACM certificate.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-SEC-TG-UNHEALTHY",
+      "service": "ELBv2",
+      "category": "SECURITY",
+      "severity": "MEDIUM",
+      "title": "[DEMO] Target Group Has Unhealthy Targets",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "arn:aws:elasticloadbalancing:demo:000000000000:targetgroup/demo/123",
+      "evidence": "DEMO DATA: UnhealthyTargets=1 TotalTargets=2.",
+      "remediation_cmd": "Investigate health checks, ports, security groups, and application health.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-COST-NAT-REVIEW",
+      "service": "EC2 / VPC",
+      "category": "COST",
+      "severity": "LOW",
+      "title": "[DEMO] NAT Gateway Running Cost Review",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "nat-demo000000000000",
+      "evidence": "DEMO DATA: State=available EstimatedBaseMonthlyCost=$32.40.",
+      "remediation_cmd": "Review NAT Gateway traffic and route table usage.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    },
+    {
+      "id": "DEMO-SEC-R53-WILDCARD",
+      "service": "Route 53",
+      "category": "SECURITY",
+      "severity": "LOW",
+      "title": "[DEMO] Route 53 Public Wildcard DNS Record",
+      "description": "Simulated finding for dashboard demonstration only.",
+      "resource_id": "ZDEMO:*.demo.automyx.tech:A",
+      "evidence": "DEMO DATA: Type=A Name=*.demo.automyx.tech.",
+      "remediation_cmd": "Confirm wildcard DNS is intentional.",
+      "impact": "Demo impact text. Not from a live AWS account."
+    }
+  ],
+  "scanned_resources": [
+    {
+      "service": "IAM",
+      "resource_type": "Root Account",
+      "resource_id": "arn:aws:iam::000000000000:root",
+      "name": "\u003croot_account\u003e",
+      "region": "global",
+      "status": "DEMO",
+      "checks": [
+        "root_mfa_credential_report"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "IAM",
+      "resource_type": "User",
+      "resource_id": "arn:aws:iam::000000000000:user/demo-admin",
+      "name": "demo-admin",
+      "region": "global",
+      "status": "DEMO",
+      "checks": [
+        "access_key_age"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "S3",
+      "resource_type": "Bucket",
+      "resource_id": "arn:aws:s3:::demo-audit-bucket",
+      "name": "demo-audit-bucket",
+      "region": "global",
+      "status": "DEMO",
+      "checks": [
+        "public_access_block",
+        "default_encryption",
+        "versioning"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / VPC",
+      "resource_type": "VPC",
+      "resource_id": "vpc-demo000000000000",
+      "name": "demo-vpc",
+      "region": "demo",
+      "status": "DEMO",
+      "checks": [
+        "cidr_block",
+        "default_vpc_flag"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / VPC",
+      "resource_type": "Subnet",
+      "resource_id": "subnet-demo000000000000",
+      "name": "demo-public-subnet",
+      "region": "demo",
+      "status": "available",
+      "checks": [
+        "map_public_ip_on_launch",
+        "available_ip_count",
+        "vpc_association"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / VPC",
+      "resource_type": "Route Table",
+      "resource_id": "rtb-demo000000000000",
+      "name": "demo-public-rt",
+      "region": "demo",
+      "status": "DEMO",
+      "checks": [
+        "internet_gateway_default_route",
+        "subnet_associations"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / VPC",
+      "resource_type": "Network ACL",
+      "resource_id": "acl-demo000000000000",
+      "name": "demo-public-acl",
+      "region": "demo",
+      "status": "DEMO",
+      "checks": [
+        "public_inbound_management_ports",
+        "public_inbound_database_ports"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / Security Groups",
+      "resource_type": "Security Group",
+      "resource_id": "sg-demo000000000000",
+      "name": "demo-ssh",
+      "region": "demo",
+      "status": "DEMO",
+      "checks": [
+        "public_ingress_management_ports"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "EC2 / Instances",
+      "resource_type": "Instance",
+      "resource_id": "i-demo000000000000",
+      "name": "demo-linux",
+      "region": "demo",
+      "status": "running",
+      "checks": [
+        "state",
+        "public_ip"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / EBS",
+      "resource_type": "Volume",
+      "resource_id": "vol-demo000000000000",
+      "name": "vol-demo000000000000",
+      "region": "demo",
+      "status": "available",
+      "checks": [
+        "attachment_state",
+        "volume_size",
+        "volume_type"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "EC2 / Elastic IP",
+      "resource_type": "Elastic IP",
+      "resource_id": "eipalloc-demo000000000000",
+      "name": "203.0.113.10",
+      "region": "demo",
+      "status": "unassociated",
+      "checks": [
+        "association_state",
+        "public_ipv4_charge"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "EC2 / VPC",
+      "resource_type": "NAT Gateway",
+      "resource_id": "nat-demo000000000000",
+      "name": "demo-nat",
+      "region": "demo",
+      "status": "available",
+      "checks": [
+        "state",
+        "subnet",
+        "hourly_cost_awareness"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "ELBv2",
+      "resource_type": "Load Balancer",
+      "resource_id": "arn:aws:elasticloadbalancing:demo:000000000000:loadbalancer/app/demo/123",
+      "name": "demo-alb",
+      "region": "demo",
+      "status": "active",
+      "checks": [
+        "scheme",
+        "listeners",
+        "tls_termination",
+        "target_groups"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "ELBv2",
+      "resource_type": "Target Group",
+      "resource_id": "arn:aws:elasticloadbalancing:demo:000000000000:targetgroup/demo/123",
+      "name": "demo-tg",
+      "region": "demo",
+      "status": "HTTP",
+      "checks": [
+        "registered_targets",
+        "target_health",
+        "health_check"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "Auto Scaling",
+      "resource_type": "Auto Scaling Group",
+      "resource_id": "arn:aws:autoscaling:demo:000000000000:autoScalingGroup:demo:autoScalingGroupName/demo-asg",
+      "name": "demo-asg",
+      "region": "demo",
+      "status": "CHECKED",
+      "checks": [
+        "desired_capacity",
+        "min_max_capacity",
+        "instance_health"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "RDS",
+      "resource_type": "DB Instance",
+      "resource_id": "arn:aws:rds:demo:000000000000:db:demo-db",
+      "name": "demo-db",
+      "region": "demo",
+      "status": "available",
+      "checks": [
+        "storage_encryption",
+        "public_accessibility",
+        "backup_retention"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "CloudFront",
+      "resource_type": "Distribution",
+      "resource_id": "EDFDEMO000000",
+      "name": "d111111abcdef8.cloudfront.net",
+      "region": "global",
+      "status": "Deployed",
+      "checks": [
+        "viewer_protocol_policy",
+        "custom_certificate",
+        "waf_association"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "Route 53",
+      "resource_type": "Hosted Zone",
+      "resource_id": "ZDEMO",
+      "name": "demo.automyx.tech",
+      "region": "global",
+      "status": "public",
+      "checks": [
+        "record_sets",
+        "query_logging",
+        "wildcard_records"
+      ],
+      "finding_count": 0
+    },
+    {
+      "service": "Route 53",
+      "resource_type": "Record Set",
+      "resource_id": "ZDEMO:*.demo.automyx.tech:A",
+      "name": "*.demo.automyx.tech",
+      "region": "global",
+      "status": "A",
+      "checks": [
+        "dns_record_inventory"
+      ],
+      "finding_count": 1
+    },
+    {
+      "service": "ACM",
+      "resource_type": "Certificate",
+      "resource_id": "arn:aws:acm:demo:000000000000:certificate/demo",
+      "name": "demo.automyx.tech",
+      "region": "demo",
+      "status": "ISSUED",
+      "checks": [
+        "expiry",
+        "in_use",
+        "renewal_eligibility"
+      ],
+      "finding_count": 1
+    }
+  ]
+}

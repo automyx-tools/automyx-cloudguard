@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AutoMyx CloudGuard | AWS Security & Cost Triage</title>
+  <meta name="description" content="Statically compiled, zero-cost, privacy-first cloud auditing and triage platform.">
+  
+  <!-- Modern Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="dark-theme">
+  
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="header-container">
+      <div class="brand">
+        <img src="automyx-logo-512.png" alt="AutoMyx Logo" class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-name">AutoMyx</span>
+          <span class="brand-product">CloudGuard</span>
+        </div>
+      </div>
+      <nav class="nav-tabs" aria-label="Application tabs">
+        <button class="tab-btn active" data-target="scanner-section">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+          Auditor Engine
+        </button>
+        <button class="tab-btn" data-target="dashboard-section" id="nav-dashboard" disabled>
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"></rect><rect x="14" y="3" width="7" height="5"></rect><rect x="14" y="12" width="7" height="9"></rect><rect x="3" y="16" width="7" height="5"></rect></svg>
+          Executive Dashboard
+        </button>
+        <button class="tab-btn" data-target="ai-section">
+          <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+          AI SecOps Advisor
+        </button>
+      </nav>
+      <div class="system-badge">
+        <span class="status-indicator online"></span>
+        <span class="badge-text" id="engine-mode">CLIENT-SIDE ONLY</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content">
+    
+    <!-- SECTION 1: SCANNER & CONFIGURATION -->
+    <section id="scanner-section" class="tab-content active-content">
+      <div class="grid-2col">
+        
+        <!-- Left: Configuration Form -->
+        <div class="card glass-card fade-in">
+          <div class="card-header">
+            <span class="eyebrow">Privacy First</span>
+            <h2>Import Local AWS Audit Report</h2>
+            <p class="subtitle">Run the Go CLI scanner on your workstation or jump box, then upload the generated JSON report here. This browser UI does not accept AWS access keys or run AWS API scans.</p>
+          </div>
+          
+          <form id="scan-config-form" class="config-form">
+            <div class="finding-evidence">
+              <strong>Live AWS scan:</strong><br>
+              <code>./automyx-cloudguard --output automyx-report.json</code><br><br>
+              <strong>Demo report:</strong><br>
+              <code>./automyx-cloudguard --demo --output automyx-demo-report.json</code>
+            </div>
+            <div class="form-row" hidden>
+              <div class="form-group half-width" style="position: relative;">
+                <label for="aws-region-search">Target Region</label>
+                <div class="region-search-container">
+                  <input type="text" id="aws-region-search" placeholder="Search region... e.g. ap-south-1" value="ap-south-1" autocomplete="off">
+                  <input type="hidden" id="aws-region" value="ap-south-1">
+                  <div id="aws-region-dropdown" class="region-dropdown-list hidden">
+                    <div class="region-option selected" data-value="ap-south-1">ap-south-1 (Asia Pac - Mumbai)</div>
+                    <div class="region-option" data-value="us-east-1">us-east-1 (US East - N. Virginia)</div>
+                    <div class="region-option" data-value="us-east-2">us-east-2 (US East - Ohio)</div>
+                    <div class="region-option" data-value="us-west-1">us-west-1 (US West - N. California)</div>
+                    <div class="region-option" data-value="us-west-2">us-west-2 (US West - Oregon)</div>
+                    <div class="region-option" data-value="ap-northeast-1">ap-northeast-1 (Asia Pac - Tokyo)</div>
+                    <div class="region-option" data-value="ap-northeast-2">ap-northeast-2 (Asia Pac - Seoul)</div>
+                    <div class="region-option" data-value="ap-southeast-1">ap-southeast-1 (Asia Pac - Singapore)</div>
+                    <div class="region-option" data-value="ap-southeast-2">ap-southeast-2 (Asia Pac - Sydney)</div>
+                    <div class="region-option" data-value="eu-west-1">eu-west-1 (Europe - Ireland)</div>
+                    <div class="region-option" data-value="eu-west-2">eu-west-2 (Europe - London)</div>
+                    <div class="region-option" data-value="eu-central-1">eu-central-1 (Europe - Frankfurt)</div>
+                    <div class="region-option" data-value="sa-east-1">sa-east-1 (South America - São Paulo)</div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group half-width">
+                <label for="scan-mode">Audit Depth</label>
+                <select id="scan-mode">
+                  <option value="full">All AWS Services (Standard)</option>
+                  <option value="security">Security Only</option>
+                  <option value="cost">Cost Leak Audit</option>
+                </select>
+              </div>
+            </div>
+            
+            <button type="submit" class="btn secondary-btn w-100" id="start-scan-btn">
+              <span>CLI scan required</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+            </button>
+          </form>
+          
+          <div class="divider"><span>UPLOAD REPORT</span></div>
+          
+          <!-- Dropzone for Go CLI Report -->
+          <div id="dropzone" class="dropzone-area">
+            <input type="file" id="report-file-input" accept=".json" class="file-hidden">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+            <h3>Drag & Drop CLI Report</h3>
+            <p>Upload the <code>automyx-report.json</code> generated by your Go CLI scanner to visualize findings locally.</p>
+            <button class="btn secondary-btn compact-btn" onclick="document.getElementById('report-file-input').click()">Browse Files</button>
+          </div>
+        </div>
+        
+        <!-- Right: Auditing Terminal Console -->
+        <div class="card terminal-card glass-card fade-in">
+          <div class="terminal-header">
+            <div class="terminal-buttons">
+              <span class="t-btn close"></span>
+              <span class="t-btn minimize"></span>
+              <span class="t-btn expand"></span>
+            </div>
+            <div class="terminal-title">automyx-auditor.sh</div>
+            <div class="terminal-actions">
+              <button class="terminal-clear-btn" id="clear-console-btn">Clear</button>
+            </div>
+          </div>
+          <div class="terminal-body" id="console-output">
+            <div class="console-line system-line">[SYSTEM] AutoMyx CloudGuard report viewer ready.</div>
+            <div class="console-line system-line">[SYSTEM] Run the CLI locally and upload automyx-report.json.</div>
+            <div class="console-line prompt-line">$ _</div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION 2: EXECUTIVE DASHBOARD -->
+    <section id="dashboard-section" class="tab-content">
+      <div class="dashboard-actions fade-in">
+        <div>
+          <h2>Executive Dashboard</h2>
+          <p class="subtitle">Local AWS audit summary generated from the uploaded CloudGuard report.</p>
+        </div>
+        <button class="btn secondary-btn compact-btn" id="download-dashboard-pdf-btn" disabled>
+          <span>Download PDF</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        </button>
+      </div>
+      
+      <!-- Scan Result Metadata Strip -->
+      <div class="dashboard-header-strip fade-in">
+        <div class="meta-item">
+          <span class="meta-label">Target Account:</span>
+          <span class="meta-value" id="res-account-id">No report loaded</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Region:</span>
+          <span class="meta-value" id="res-region">us-east-1</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Scan Source:</span>
+          <span class="meta-value badge-mode" id="res-scan-mode">NO REPORT</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Scan Completed:</span>
+          <span class="meta-value" id="res-scan-time">Just Now</span>
+        </div>
+      </div>
+
+      <!-- Overview Statistics Grid -->
+      <div class="stats-grid fade-in">
+        
+        <!-- Gauge Chart Card -->
+        <div class="card glass-card score-card">
+          <div class="score-container">
+            <svg class="progress-ring" width="160" height="160">
+              <circle class="progress-ring-circle-bg" stroke="#1e293b" stroke-width="12" fill="transparent" r="66" cx="80" cy="80"/>
+              <circle class="progress-ring-circle" id="score-ring" stroke="var(--primary-glow)" stroke-width="12" fill="transparent" r="66" cx="80" cy="80"/>
+            </svg>
+            <div class="score-text">
+              <span class="score-number" id="score-percentage">74%</span>
+              <span class="score-label">Security Score</span>
+            </div>
+          </div>
+          <div class="score-description">
+            <h3 id="score-rating-text">NEEDS ATTENTION</h3>
+            <p>Your cloud has critical configuration flaws exposing systems to attack or cost leaks.</p>
+          </div>
+        </div>
+
+        <!-- Metric Details Cards -->
+        <div class="metric-group">
+          <!-- Cost Saving -->
+          <div class="card glass-card metric-card saving-theme">
+            <div class="metric-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-label">Estimated Cost Savings</span>
+              <h2 class="metric-value text-glowing" id="metric-savings">$56.00 / mo</h2>
+              <span class="metric-subtext">Across orphaned & idle items</span>
+            </div>
+          </div>
+          
+          <!-- Checked Resources -->
+          <div class="card glass-card metric-card info-theme">
+            <div class="metric-icon-box">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+            </div>
+            <div class="metric-info">
+              <span class="metric-label">Audited Resources</span>
+              <h2 class="metric-value" id="metric-checked">124</h2>
+              <span class="metric-subtext" id="metric-resource-subtext">Across all AWS services</span>
+              <div class="metric-mini-grid">
+                <span>Services scanned</span>
+                <strong id="metric-services-scanned">-</strong>
+                <span>Services in region</span>
+                <strong id="metric-services-deployed">-</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Severity breakdown card -->
+        <div class="card glass-card severity-card">
+          <h3>Findings Breakdown</h3>
+          <div class="severity-stat-row critical-stat">
+            <span class="sev-tag text-critical">Critical</span>
+            <div class="sev-bar-bg"><div class="sev-bar critical" id="bar-critical" style="width: 25%"></div></div>
+            <span class="sev-count" id="count-critical">2</span>
+          </div>
+          <div class="severity-stat-row high-stat">
+            <span class="sev-tag text-high">High</span>
+            <div class="sev-bar-bg"><div class="sev-bar high" id="bar-high" style="width: 25%"></div></div>
+            <span class="sev-count" id="count-high">2</span>
+          </div>
+          <div class="severity-stat-row medium-stat">
+            <span class="sev-tag text-medium">Medium</span>
+            <div class="sev-bar-bg"><div class="sev-bar medium" id="bar-medium" style="width: 25%"></div></div>
+            <span class="sev-count" id="count-medium">2</span>
+          </div>
+          <div class="severity-stat-row low-stat">
+            <span class="sev-tag text-low">Low</span>
+            <div class="sev-bar-bg"><div class="sev-bar low" id="bar-low" style="width: 12%"></div></div>
+            <span class="sev-count" id="count-low">1</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scanned Resources Inventory -->
+      <div class="resources-section fade-in">
+        <div class="findings-header">
+          <div>
+            <h2>Scanned Resources</h2>
+            <p class="subtitle">Every resource the CLI scanner inspected in the uploaded report.</p>
+          </div>
+          <div class="findings-controls">
+            <select class="select-filter" id="resource-service-filter">
+              <option value="ALL">All Services</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="resources-table-wrap">
+          <table class="resources-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Type</th>
+                <th>Name</th>
+                <th>Resource ID</th>
+                <th>Region</th>
+                <th>Status</th>
+                <th>Checks</th>
+                <th>Findings</th>
+              </tr>
+            </thead>
+            <tbody id="resources-container">
+              <tr>
+                <td colspan="8" class="empty-table-cell">Upload a report to list scanned resources.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Main Audit Findings Section -->
+      <div class="findings-section fade-in">
+        <div class="findings-header">
+          <h2>Cloud Triage Reports</h2>
+          <div class="findings-controls">
+            
+            <!-- Category Toggle -->
+            <div class="filter-toggle-group">
+              <button class="filter-toggle-btn active" data-category="all">All Findings</button>
+              <button class="filter-toggle-btn" data-category="SECURITY">Security Risks</button>
+              <button class="filter-toggle-btn" data-category="COST">Cost Leaks</button>
+            </div>
+            
+            <!-- Severity Filter -->
+            <select class="select-filter" id="severity-filter">
+              <option value="ALL">All Severities</option>
+              <option value="CRITICAL">Critical Only</option>
+              <option value="HIGH">High & Above</option>
+              <option value="MEDIUM">Medium & Above</option>
+              <option value="LOW">Low</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Finding Cards Grid -->
+        <div class="findings-list" id="findings-container">
+          <!-- Populated dynamically via app.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: AI SECOPS ADVISOR -->
+    <section id="ai-section" class="tab-content">
+      <div class="card ai-card glass-card fade-in">
+        <div class="ai-chat-container">
+          
+          <!-- AI Panel Sidebar: Active Scan Context -->
+          <div class="ai-context-panel">
+            <h3>Audit Context</h3>
+            <p class="subtitle">CloudGuard supplies local scan metrics to the AI context to secure accurate analysis.</p>
+            
+            <div class="context-item">
+              <span class="context-key">Target Account:</span>
+              <span class="context-val" id="ai-context-account">No report loaded</span>
+            </div>
+            <div class="context-item">
+              <span class="context-key">Security Score:</span>
+              <span class="context-val text-critical" id="ai-context-score">74%</span>
+            </div>
+            <div class="context-item">
+              <span class="context-key">Flaws Detected:</span>
+              <span class="context-val" id="ai-context-findings">7</span>
+            </div>
+            
+            <div class="context-section-title">Analysis Mode</div>
+            <div class="form-group" style="margin-top: 5px;">
+              <select id="ai-provider-select" class="compact-select">
+                <option value="bedrock">AWS Bedrock (Dynamic Role)</option>
+                <option value="openai">OpenAI (Paste API Key)</option>
+                <option value="mock" selected>Local Simulation Model (Free)</option>
+              </select>
+            </div>
+            
+            <div class="form-group" id="ai-key-group" style="display: none; margin-top: 10px;">
+              <label for="ai-api-key" class="compact-label">API Key</label>
+              <input type="password" id="ai-api-key" class="compact-input" placeholder="sk-...">
+            </div>
+          </div>
+
+          <!-- AI Chat Area -->
+          <div class="ai-chat-interface">
+            <div class="chat-header">
+              <div class="avatar-shield">🤖</div>
+              <div>
+                <h4>AutoMyx SecOps Agent</h4>
+                <p class="subtitle">Cloud security advisor ready to troubleshoot findings and design Terraform patches.</p>
+              </div>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages-box">
+              <div class="chat-msg ai-msg">
+                <div class="msg-bubble">
+                  Hello! I am your AutoMyx Cloud Security Advisor. I have access to your local audit logs. 
+                  <br><br>
+                  You can click <strong>"Consult AI Analyst"</strong> on any security finding card to get customized impact analysis and copy-pasteable Terraform remediation scripts, or ask me any question directly!
+                </div>
+                <span class="msg-time">Just Now</span>
+              </div>
+            </div>
+            
+            <form id="chat-input-form" class="chat-input-bar">
+              <input type="text" id="chat-user-input" placeholder="Ask about specific findings, remediation actions, or how to secure these services..." autocomplete="off">
+              <button type="submit" class="btn primary-btn compact-btn">
+                <span>Send</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Notification Banner -->
+  <div id="toast-notification" class="toast-card">
+    <div class="toast-content">
+      <span class="toast-icon">✓</span>
+      <span class="toast-msg" id="toast-message">Action completed successfully.</span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
